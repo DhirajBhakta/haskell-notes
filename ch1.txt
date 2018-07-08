@@ -1,0 +1,187 @@
+Lambda Calculus:
+		formalizes the theory of EFFECTIVE COMPUTABILITY.
+        determines which class of problems can or cannot be solved.
+        (Sounds like Turing machine)
+
+
+Functional Programming:
+		Programs are combinations of expressions
+
+Referential Transparency:
+		The same function, given the same input, will return the same output.
+        (definition of FUNCTION in math.)
+
+
+
+Lambda Calculus has three basic components(Lambda terms)
+|__Expressions(superset)
+|__Variables
+|__Abstractions
+
+Abstractions:
+		They are functions.
+		They are lambda terms that have a head and a body : λx.x
+        λx.x is an anonymous function.
+        dot separates the head from the body.
+
+Beta Reduction:
+        Process of calculating a result from the application of a function(abstraction)
+        to an expression.
+        The purpose of the head is to specifiy which variables to replace ,
+        when we APPLY or EVALUATE the function(abstraction).
+        The head contains the bound variables.
+        (λx.x)2  returns 2
+        (λx.x)10 returns 10
+        λx.x is thus, an identity function.
+        Beta reduction is the process of
+            |--Applying a lambda term to an argument
+            |---Replacing the bound variables with the value of the argument.
+            |----Eliminating the head.
+            (Eliminating the head tells you that the function has been applied)
+
+
+        Lambda abstraction can be applied to another lambda abstraction.
+        (λx.x)(λy.y)
+        the whole function(λy.y) becomes the argument to the(λx.x)
+        -->we apply [x:=(λy.y)]
+        -->we get λy.y
+        our final result is another identity function.(thers nothing to reduce)
+
+
+        (λx.x)(λy.y)z
+        -->((λx.x)(λy.y))z
+        --> we apply [x:=(λy.y)]
+        --> we get (λy.y)z
+        --> we apply [y:=z]
+        --> we get z
+        we stop bcoz thers nothing left to apply and we know nothing about z
+
+NOTE:
+        APPLICATIONS IN LAMBDA CALCULUS ARE LEFT ASSOCIATIVE:
+        that means ..evaluated left to right ---->
+
+
+Free variables:
+        variables present in body, but not bound by the head.
+        variables not named in the head.
+        eg: λx.xy  y is free variable
+        They remain un-reducible (stay as it is)
+
+        (λx.xy)z
+        -->we apply [x:=z]
+        -->we get zy
+        we stop bcoz thers nothing left to apply and we know nothing about z or y
+
+
+Multiple Arguments(Currying):
+        Translating the evaluation of a function that takes multiple arguments into
+        evaluating a sequence of functions, each with single argument.
+        eg:
+            //uncurried
+            function add(a,b){
+                return a+b;
+            }
+            //curried
+            function add(a){
+                return function(b){
+                    return a+b;
+                }
+            }
+            //usage
+            let result = add(3)(4);
+
+        EACH LAMBDA CAN ONLY BIND ONE ARGUMENT
+        functions that require multiple arguments, have multiple nested heads.
+        When you apply and eliminate the leftmost head,the next one is applied..so on.
+
+        λxy.xy is a shorthand for λx.(λy.xy)
+        when applying the first argument, youre binding x, eliminating the outer lambda
+        eg:(λxy.xy)12
+        -->(λx.λy.xy)12
+        -->we apply [x:=1]
+        -->we get (λy.1y)2
+        -->we apply [y:=2]
+        -->we get 12
+        λxy.xy turned out to be identity function
+
+        eg:(λxy.xy)(λz.a)1
+        -->(λx.λy.xy)(λz.a)1
+        -->we apply [x:=(λz.a)]
+        -->we get (λy.(λz.a)y)1
+        -->we apply [y:=1]
+        -->we get (λz.a)1
+        -->we get a
+
+
+        eg:(λxyz.xz(yz))(λmn.m)(λp.p)
+        -->(λx.λy.λz.xz(yz))(λm.λn.m)(λp.p) ..  //just curried
+        -->we apply [x:=(λm.λn.m)]
+        -->we get (λy.λz.(λm.λn.m)z(yz))(λp.p)
+        -->we apply [y:=(λp.p)]
+        -->we get (λz.(λm.λn.m)z((λp.p)z))
+        -->Outermost lambda binding z is irreducible at this point.
+        -->so we go deeper and reduce whatever is available
+        -->we apply [m:=z]
+        -->we get λz.(λn.z)(λp.p)z
+        -->we apply [n:=((λp.p)z)]
+        -->Observe λn.z
+            it doesnt matter what input it got(doesnt matter what n got bound to),
+            it just tosses it and returns z
+        -->so we get λz.z
+
+
+Normalization (Evaluation is Simplification):
+        "Beta Normal Form"
+        -when you cannot beta reduce the terms any further.
+        -->"fully evaluated expression"
+        -->"fully executed program"
+        when you've obtained the normal form, you're done evaluating the function.
+
+        eg:* λx.x is in beta normal form
+           * (λx.x)z is NOT in beta normal form because it can be reduced to z
+
+
+
+
+Combinator:
+        Lambda term with no free variables.
+        eg:λx.x
+        eg:λxy.x
+        eg:λxyz.xz(yz)
+
+        λy.x is not a combinator
+        λx.xz is not a combinator
+
+        Combinators only COMBINE the arguments theyre given, without injecting new values/data
+
+
+Divergence:
+        Reduction process never terminates.....
+        you could go on and on, and the expression remains the same.
+        not because theyre fully reduces, this is because they diverge.
+
+        eg: Omega
+        (λx.xx)(λx.xx)
+        we attempt to reduce it..
+        --> we apply [x:=(λx.xx)]
+        --> we get (λx.xx)(λx.xx)
+        we obtained the same thing.
+
+        divergent terms dont produce an answer we want., not meaningful
+
+
+
+
+SUMMARY:
+-------------------------------
+1)All functions take ONE argument, and return ONE result
+2)Haskell is a "typed" lambda calculus.
+  Meaning of Haskell programs is centered around
+  evaluating expressions
+  than
+  executing instructions
+3)Normal order:
+        is an evaluation strategy.
+        means evaluating, or beta reducing, or applying the leftmost outer lambdas first.
+        and then evaluating the terms nested within after youve run out of arguments to apply.
+

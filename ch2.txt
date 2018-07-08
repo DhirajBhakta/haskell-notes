@@ -1,0 +1,48 @@
+Everything in Haskell is an expression or declaration.
+
+Expressions maybe
+    |__ Values
+    |__ Combination of Values
+    |__ and/or Functions applied to Values
+
+Expressions evaluate to a result.
+
+Programs themselves are one Big expressions made up of smaller expressions.
+Expressions are building blocks of our programs.
+
+eg: 1          -|
+eg: 1+1         |Are all expressions
+eg: "Icarus"   _|
+
+"normalizing" == "executing" == "evaluating" == "reducing"
+
+
+
+Functions:
+        As in lambda calculus, all functions in Haskell take one argument as
+        input and return one value as output.
+        When it seems that we're passing multiple arguments to a function,
+        we are actually applying a series of nested functions,
+        each to one argument. (CURRYING)
+
+        defining functions:
+                let triple x = x*3        λx.x*3
+                let half x = x/2          λx.x/2
+                let double x = x*2        λx.x*2
+                let add x y = x+y(CURRIED)λxy.x+y or λx.λy.x+y
+
+
+                //usage (evaluating/reducing/executing our functions)
+                triple 2
+                half 10
+                double 2
+                add 3 4
+
+                "executing the function with a value turns the function into
+                a reducible expression."
+
+                --Name of the function (say, triple) should be lowercase
+                --Arguments to the function correspond to the head of the lambda
+                --variable names are lowercase
+
+
