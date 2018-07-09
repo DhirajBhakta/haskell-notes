@@ -46,3 +46,51 @@ Functions:
                 --variable names are lowercase
 
 
+Prefix Functions:
+            eg: triple 3
+                half 2
+                double 2
+
+Infix Functions:
+            eg: 1 + 2
+                3 * 3
+                4 / 2
+                yes, the mathematical operators are actually functions.
+
+
+
+
+Anonymous Functions:
+        λ is represented by \
+        (\x->x+1) is an anon function
+        (\x->x+1)4 returns 5 . this is an example of application
+        \x y -> x+y  could be applied as (\x y -> x+y)4 5  which is UNCURRIED btw
+
+        you can give a name to the anon function too
+        let adder = \x y -> x+y
+
+
+
+NOTE
+---------------|
+func x = x     |
+               |
+is same as     |
+               |
+func = (\x->x) |
+               |
+---------------|
+
+NOTE: \ means λ
+
+implementing λxy.x+y   UNCURRIED
+        let adder = \x y -> x+y
+
+implementing λx.λy.x+y CURRIED
+        let adder = \x->(\y->x+y)
+
+which is same as      UNCURRIED
+        let adder x y = x+y
+
+which is same as
+        let adder x = \y->x+y
